@@ -1,14 +1,5 @@
 package com.example.gomokuexample;
 
-/**
- * GomokuGame class – handles all game logic:
- * - board state (20x20)
- * - move validation
- * - win checking
- * - turn switching
- * - tracking moves and max row lengths
- * - resetting the game
- */
 class GomokuGame {
     private int[][] board;
     private int currentPlayer;
