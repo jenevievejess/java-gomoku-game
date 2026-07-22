@@ -22,11 +22,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-/**
- * GomokuGameFX – Traditional Gomoku game
- * Features: smaller board, turn bowls at top, pause function, stats on right,
- * temporary board messages, game‑over overlay (blur + buttons).
- */
+
 public class GomokuGameFX extends Application {
     // Board constants
     private static final int BOARD_SIZE = 20;
@@ -91,7 +87,6 @@ public class GomokuGameFX extends Application {
         topPanel.getChildren().addAll(blackBox, topCenter, whiteBox);
         root.setTop(topPanel);
 
-        // ----- CENTER: canvas with pause overlay and temporary message -----
         canvas = new Canvas(CELL_SIZE * BOARD_SIZE, CELL_SIZE * BOARD_SIZE);
         gc = canvas.getGraphicsContext2D();
         drawBoard();
@@ -110,7 +105,7 @@ public class GomokuGameFX extends Application {
         canvasContainer.getChildren().add(tempMessage);
         StackPane.setAlignment(tempMessage, Pos.CENTER);
 
-        // ----- RIGHT PANEL: stats and vertical buttons -----
+        // side panel: stats and vertical buttons
         VBox rightPanel = new VBox(15);
         rightPanel.setPadding(new Insets(20));
         rightPanel.setStyle("-fx-background-color: #f5deb3; -fx-border-color: #8b5a2b;");
@@ -244,14 +239,9 @@ public class GomokuGameFX extends Application {
         hideTimer.play();
     }
 
-    /**
-     * Game Over overlay: blurs the whole root, shows winner and two buttons.
-     */
     private void showGameOverOverlay(String winner) {
-        // Blur the entire root (including all panels)
         root.setEffect(new GaussianBlur(10));
 
-        // Create overlay StackPane that covers the whole root
         gameOverOverlay = new StackPane();
         gameOverOverlay.setStyle("-fx-background-color: rgba(0,0,0,0.7);");
         gameOverOverlay.setAlignment(Pos.CENTER);
@@ -272,7 +262,6 @@ public class GomokuGameFX extends Application {
         Button newGameBtn = new Button("New Game");
         newGameBtn.setStyle("-fx-background-color: #8b5a2b; -fx-text-fill: white; -fx-font-size: 16px; -fx-cursor: hand;");
         newGameBtn.setOnAction(e -> {
-            // Remove overlay and blur, then reset game
             root.setEffect(null);
             ((Pane) root.getParent()).getChildren().remove(gameOverOverlay);
             resetGame();
@@ -286,12 +275,8 @@ public class GomokuGameFX extends Application {
         content.getChildren().addAll(winLabel, buttonBox);
         gameOverOverlay.getChildren().add(content);
 
-        // Add overlay to the scene's root (the BorderPane is inside a Pane, but we can add to the scene's root directly)
-        // Since root is the main container, we need to wrap it or add overlay as sibling. Simpler: get the scene's root group.
         Pane sceneRoot = (Pane) root.getParent();
         if (sceneRoot == null) {
-            // If root is directly the scene's root, we need to wrap it. But here root is added to scene.
-            // We'll temporarily reparent root into a new StackPane.
             Scene scene = root.getScene();
             StackPane newRoot = new StackPane();
             newRoot.getChildren().add(root);
@@ -410,7 +395,6 @@ public class GomokuGameFX extends Application {
         startTimer();
         updateTurnDisplay();
         tempMessage.setVisible(false);
-        // If game over overlay is visible, remove it and blur
         if (gameOverOverlay != null && root.getScene() != null) {
             root.setEffect(null);
             Pane parent = (Pane) root.getParent();
